@@ -1,18 +1,40 @@
-runtime: "container"
-build:
-  dockerfile: "Dockerfile"           # Path to your Dockerfile
-  dockerBuildPath: "."               # Docker build context
+# Smithery configuration file: https://smithery.ai/docs/build/project-config
+
 startCommand:
-  type: "http"
-  # configSchema:                      # Optional: JSON Schema for configuration
-  #   type: "object"
-  #   properties:
-  #     n8nApiKey:
-  #       type: "string"
-  #       description: "n8nApiKey"
-  #     n8nApiUrl:
-  #       type: "string"
-  #       description: "n8nApiUrl"
-  # exampleConfig:                     # Optional: Example configuration
-  #   n8nApiKey: "your-n8n-api-key-here"
-  #   n8nApiUrl: "your-n8n-api-url-here"
+  type: stdio
+  commandFunction:
+    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    |-
+    (config) => {
+      const env = {
+        MCP_MODE: 'stdio',
+        LOG_LEVEL: config.logLevel || 'error',
+        DISABLE_CONSOLE_OUTPUT: String(config.disableConsoleOutput !== undefined ? config.disableConsoleOutput : true),
+      };
+      if (config.n8nApiUrl) env.N8N_API_URL = config.n8nApiUrl;
+      if (config.n8nApiKey) env.N8N_API_KEY = config.n8nApiKey;
+      return { command: 'node', args: ['dist/mcp/index.js'], env };
+    }
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    properties:
+      logLevel:
+        type: string
+        default: error
+        description: Log level for the MCP server
+      disableConsoleOutput:
+        type: boolean
+        default: true
+        description: Disable console output to stderr
+      n8nApiUrl:
+        type: string
+        description: Optional n8n API URL for management tools
+      n8nApiKey:
+        type: string
+        description: Optional n8n API Key for management tools
+  exampleConfig:
+    logLevel: error
+    disableConsoleOutput: true
+    n8nApiUrl: https://your-n8n-instance.com
+    n8nApiKey: your-api-key
