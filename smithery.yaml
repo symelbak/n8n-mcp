@@ -4,15 +4,15 @@ build:
   dockerBuildPath: "."               # Docker build context
 startCommand:
   type: "http"
-  configSchema:                      # Optional: JSON Schema for configuration
-    type: "object"
-    properties:
-      n8nApiKey:
-        type: "string"
-        description: "n8nApiKey"
-      n8nApiUrl:
-        type: "string"
-        description: "n8nApiUrl"
-  exampleConfig:                     # Optional: Example configuration
-    n8nApiKey: "your-n8n-api-key-here"
-    n8nApiUrl: "your-n8n-api-url-here"
+  # configSchema:                      # Optional: JSON Schema for configuration
+  #   type: "object"
+  #   properties:
+  #     n8nApiKey:
+  #       type: "string"
+  #       description: "n8nApiKey"
+  #     n8nApiUrl:
+  #       type: "string"
+  #       description: "n8nApiUrl"
+  # exampleConfig:                     # Optional: Example configuration
+  #   n8nApiKey: "your-n8n-api-key-here"
+  #   n8nApiUrl: "your-n8n-api-url-here"
